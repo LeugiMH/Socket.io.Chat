@@ -10,12 +10,17 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+    let mensagens = [];
+
 io.on('connection', (socket) =>{
     console.log('Usuário conectado');
+
+    socket.emit('msgAnteriores', mensagens);
+
     socket.on('chat message', (msg) => {
-        console.log('mensagem: '+msg)
+        mensagens.push(msg);
         io.emit('chat message', msg);
-    })
+    });
 
     socket.on('disconnect', () => {
         console.log("Usuário desconectado");
